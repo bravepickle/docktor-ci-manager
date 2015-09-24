@@ -1,0 +1,58 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+vm_hostname = "docktor-ci-manager"
+vm_ip = "192.168.35.121"
+vm_name = "Docktor CI/CD manager"
+vm_user = "vagrant"
+# vm_root_dir = "/var/www/#{vm_hostname}"
+
+Vagrant.configure(2) do |config|
+  config.vm.box = "ubuntu-14.04"
+  config.vm.hostname = vm_hostname
+  config.vm.boot_timeout = 720
+  config.vm.box_check_update = true
+  
+  config.vm.network "private_network", ip: vm_ip
+
+  # VMWare-specific settings
+  config.vm.provider "vmware_fusion" do |v, override|
+    #v.gui = true
+    v.vmx["memsize"] = "2048"
+    v.vmx["numvcpus"] = "2"
+    v.vmx["displayname"] = vm_name
+
+    # No need for NFS for VMWARE
+    # override.vm.synced_folder "./", vm_root_dir
+  end
+
+  # Virtualbox-specific settings
+  config.vm.provider "virtualbox" do |vb, override|
+    # Customize the amount of memory on the VM:
+    vb.memory = "2048"
+    vb.cpus = "2"
+    vb.name = vm_name
+
+    # Ensure that project config via provisioner has the same root dir
+    # override.vm.synced_folder "../", vm_root_dir, type: "nfs"
+  end
+
+  config.vm.synced_folder ".", "/vagrant", disabled: true # disable syn to "/vagrant" folder
+
+  # copy SSH keys to vagrant
+  config.vm.synced_folder "~/.ssh", "/home/vagrant/.ssh_host", type: "rsync"
+
+  # Ensure that keys from host will appear in vagrant and can be used in GIT
+  config.vm.provision "shell", name: "Copy SSH keys to user #{vm_user}", privileged: false, inline: <<-SHELL
+    test ~/.ssh_host && cp ~/.ssh_host/id_rsa* ~/.ssh
+    test ~/.ssh_host/known_hosts && cp ~/.ssh_host/known* ~/.ssh
+  SHELL
+
+  # Define a Vagrant Push strategy for pushing to Atlas. Other push strategies
+  # such as FTP and Heroku are also available. See the documentation at
+  # https://docs.vagrantup.com/v2/push/atlas.html for more information.
+  # config.push.define "atlas" do |push|
+  #   push.app = "zig-zag/docktor-ci-manager"
+  # end
+
+end
