@@ -5,6 +5,7 @@ vm_hostname = "docktor-ci-manager"
 vm_ip = "192.168.35.121"
 vm_name = "Docktor CI/CD manager"
 vm_user = "vagrant"
+vm_hieradata_dir = "/etc/puppet/hieradata"
 # vm_root_dir = "/var/www/#{vm_hostname}"
 
 Vagrant.configure(2) do |config|
@@ -37,7 +38,9 @@ Vagrant.configure(2) do |config|
     # override.vm.synced_folder "../", vm_root_dir, type: "nfs"
   end
 
+  # TODO: disable again when found solution with copying puppet files to guest
   config.vm.synced_folder ".", "/vagrant", disabled: true # disable syn to "/vagrant" folder
+  config.vm.synced_folder "puppet/hieradata", vm_hieradata_dir, type: "rsync"
 
   # copy SSH keys to vagrant
   config.vm.synced_folder "~/.ssh", "/home/vagrant/.ssh_host", type: "rsync"
@@ -47,6 +50,28 @@ Vagrant.configure(2) do |config|
     test ~/.ssh_host && cp ~/.ssh_host/id_rsa* ~/.ssh
     test ~/.ssh_host/known_hosts && cp ~/.ssh_host/known* ~/.ssh
   SHELL
+
+  config.vm.provision "shell", name: "Copy SSH keys to user #{vm_user}", privileged: false, inline: <<-SHELL
+    test -d ~/.ssh_host && cp ~/.ssh_host/id_rsa* ~/.ssh
+    test -f ~/.ssh_host/known_hosts && cp ~/.ssh_host/known_hosts ~/.ssh && \
+    rm -rf ~/.ssh_host
+  SHELL
+
+  # init docker and setup environment
+  config.vm.provision "shell", name: "Setup server configuration", path: "../bin/provision.sh"
+
+  # puppet install
+  config.vm.provision "puppet" do |puppet|
+    puppet.synced_folder_type = "rsync"
+    puppet.manifests_path = "puppet"
+    puppet.manifest_file = "site.pp"
+    puppet.options = "--yamldir #{vm_hieradata_dir}"
+    puppet.hiera_config_path = "puppet/hiera.yaml"
+
+    #puppet.working_directory = "/etc/puppet"
+    #puppet.temp_dir = "/tmp/tmp-puppet"
+    #puppet.working_directory = "/tmp/vagrant-puppet"
+  end
 
   # Define a Vagrant Push strategy for pushing to Atlas. Other push strategies
   # such as FTP and Heroku are also available. See the documentation at

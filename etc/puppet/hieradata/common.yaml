@@ -1,0 +1,11 @@
+---
+extra_packages:
+    - vim
+    - mc
+    - htop
+    - wget
+    - iotop
+
+ci_manager:
+    host: "docktor-ci-manager"
+    ip: "127.0.0.1"
