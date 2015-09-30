@@ -9,3 +9,5 @@ extra_packages:
 ci_manager:
     host: "docktor-ci-manager"
     ip: "127.0.0.1"
+
+# docker_opts: DOCKER_OPTS="--insecure-registry docktor-ci-manager:7111"

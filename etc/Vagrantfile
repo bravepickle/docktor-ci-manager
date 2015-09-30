@@ -7,13 +7,14 @@ vm_name = "Docktor CI/CD manager"
 vm_user = "vagrant"
 vm_hieradata_dir = "/etc/puppet/hieradata"
 # vm_root_dir = "/var/www/#{vm_hostname}"
+puppet_modulepath = "/etc/puppet/modules" # can be set to /usr/share/puppet/modules
 
 Vagrant.configure(2) do |config|
   config.vm.box = "ubuntu-14.04"
   config.vm.hostname = vm_hostname
   config.vm.boot_timeout = 720
   config.vm.box_check_update = true
-  
+
   config.vm.network "private_network", ip: vm_ip
 
   # VMWare-specific settings
@@ -40,22 +41,14 @@ Vagrant.configure(2) do |config|
 
   # TODO: disable again when found solution with copying puppet files to guest
   config.vm.synced_folder ".", "/vagrant", disabled: true # disable syn to "/vagrant" folder
-  config.vm.synced_folder "puppet/hieradata", vm_hieradata_dir, type: "rsync"
+  #config.vm.synced_folder "puppet/hieradata", vm_hieradata_dir, type: "rsync"
+  config.vm.synced_folder "puppet", "/etc/puppet", type: "rsync"
+  config.vm.synced_folder "../data/certs", "/certs", type: "rsync"
+
+  config.vm.synced_folder "puppet/modules", puppet_modulepath
 
   # copy SSH keys to vagrant
-  config.vm.synced_folder "~/.ssh", "/home/vagrant/.ssh_host", type: "rsync"
-
-  # Ensure that keys from host will appear in vagrant and can be used in GIT
-  config.vm.provision "shell", name: "Copy SSH keys to user #{vm_user}", privileged: false, inline: <<-SHELL
-    test ~/.ssh_host && cp ~/.ssh_host/id_rsa* ~/.ssh
-    test ~/.ssh_host/known_hosts && cp ~/.ssh_host/known* ~/.ssh
-  SHELL
-
-  config.vm.provision "shell", name: "Copy SSH keys to user #{vm_user}", privileged: false, inline: <<-SHELL
-    test -d ~/.ssh_host && cp ~/.ssh_host/id_rsa* ~/.ssh
-    test -f ~/.ssh_host/known_hosts && cp ~/.ssh_host/known_hosts ~/.ssh && \
-    rm -rf ~/.ssh_host
-  SHELL
+  config.vm.synced_folder "~/.ssh", "/home/vagrant/.ssh_host", type: "rsync", rsync__exclude: ["authorized_keys"]
 
   # init docker and setup environment
   config.vm.provision "shell", name: "Setup server configuration", path: "../bin/provision.sh"
@@ -67,6 +60,7 @@ Vagrant.configure(2) do |config|
     puppet.manifest_file = "site.pp"
     puppet.options = "--yamldir #{vm_hieradata_dir}"
     puppet.hiera_config_path = "puppet/hiera.yaml"
+    puppet.module_path = "puppet/modules"
 
     #puppet.working_directory = "/etc/puppet"
     #puppet.temp_dir = "/tmp/tmp-puppet"
