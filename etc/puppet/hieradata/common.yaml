@@ -10,4 +10,16 @@ ci_manager:
     host: "docktor-ci-manager"
     ip: "127.0.0.1"
 
+docker:
+    registry:
+        host: "docktor-ci-manager"
+        port: 5000
+        name: 'images_registry'
+        user: "zig-zag"
+        password: "1234"
+        email: "bravepickle@github.com"
+        certs_dir: "/data/private/certs"
+        lib_dir: "/data/private/registry_lib"
+
+
 # docker_opts: DOCKER_OPTS="--insecure-registry docktor-ci-manager:7111"

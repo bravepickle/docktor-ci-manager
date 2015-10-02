@@ -4,6 +4,7 @@ package { 'git':
 
 $packages = hiera('extra_packages')
 $ci_manager = hiera('ci_manager')
+$docker = hiera('docker')
 
 package { $packages:
     ensure => present,
@@ -16,6 +17,7 @@ host { 'ci_manager':
 }
 
 
+
 # ONLY FOR DEV!
 #file_line { 'docker_options':
 #	ensure => present,
@@ -25,10 +27,10 @@ host { 'ci_manager':
 #    notify => Service['docker'],
 #}
 
-service { 'docker':
-    ensure => running,
-    enable => true,
-}
+#service { 'docker':
+#    ensure => running,
+#    enable => true,
+#}
 
 # DEV mode end
 
@@ -38,13 +40,24 @@ service { 'docker':
 #    enable => true,
 #
 #}
-#node default {
-#	include project
 
-#    include '::ci_manager'
-#    include '::ci_manager'
+notify {$docker['registry']['lib_dir']:}
 
-	class {'basic':
+class {'ci_manager':
+    certs_dir => $docker['registry']['certs_dir'],
+    docker_registry_lib => $docker['registry']['lib_dir'],
+    docker_registry_image_name => $docker['registry']['name'],
+    docker_registry_host => $docker['registry']['host'],
+    docker_registry_port => $docker['registry']['port'],
+    docker_registry_user => $docker['registry']['user'],
+    docker_registry_password => $docker['registry']['password'],
+    docker_registry_email => $docker['registry']['email'],
+}
 
-	}
+#class {ci_manager::docker:
 #}
+
+class {'locales':
+    default_locale  => 'en_US.UTF-8',
+    locales => ['en_US.UTF-8 UTF-8', 'ru_UA.UTF-8 UTF-8'],
+}

@@ -7,7 +7,9 @@ vm_name = "Docktor CI/CD manager"
 vm_user = "vagrant"
 vm_hieradata_dir = "/etc/puppet/hieradata"
 # vm_root_dir = "/var/www/#{vm_hostname}"
-puppet_modulepath = "/etc/puppet/modules" # can be set to /usr/share/puppet/modules
+puppet_modulepath = "/etc/puppet/modules"
+#puppet_modulepath = "/usr/share/puppet/modules" # can be set to /etc/puppet/modules
+vm_bin = "/usr/local/bin"
 
 Vagrant.configure(2) do |config|
   config.vm.box = "ubuntu-14.04"
@@ -39,16 +41,21 @@ Vagrant.configure(2) do |config|
     # override.vm.synced_folder "../", vm_root_dir, type: "nfs"
   end
 
-  # TODO: disable again when found solution with copying puppet files to guest
   config.vm.synced_folder ".", "/vagrant", disabled: true # disable syn to "/vagrant" folder
-  #config.vm.synced_folder "puppet/hieradata", vm_hieradata_dir, type: "rsync"
-  config.vm.synced_folder "puppet", "/etc/puppet", type: "rsync"
+
   config.vm.synced_folder "../data/certs", "/certs", type: "rsync"
 
   config.vm.synced_folder "puppet/modules", puppet_modulepath
+  config.vm.synced_folder "puppet", "/etc/puppet", type: "rsync", rsync__exclude: ["modules/"]
 
   # copy SSH keys to vagrant
   config.vm.synced_folder "~/.ssh", "/home/vagrant/.ssh_host", type: "rsync", rsync__exclude: ["authorized_keys"]
+
+  # TODO: remove. Is temporary for development
+  config.vm.synced_folder "../data", "/data"
+
+  # copy binaries
+  config.vm.synced_folder "../bin", vm_bin, type: "rsync"
 
   # init docker and setup environment
   config.vm.provision "shell", name: "Setup server configuration", path: "../bin/provision.sh"

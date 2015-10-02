@@ -36,13 +36,28 @@
 # Copyright 2015 Your name here, unless otherwise noted.
 #
 class ci_manager (
-    $mode = 'prod',
-    $docker_registry_host = 'docktor-ci-manager',
-    $docker_registry_image_name = 'images_registry',
-    $docker_registry_port = 5000,
-    $docker_registry_host = 'docktor-ci-manager',
-    $certs_dir = '/certs',
-    $docker_compose_path = '/etc/docker/docker-compose.yml',
+      $docker_registry_host = 'docktor-ci-manager',
+      $docker_registry_image_name = 'images_registry',
+      $docker_registry_host = 'docktor-ci-manager',
+      $docker_registry_port = '5000',
+      $docker_registry_user = 'user',
+      $docker_registry_password = 'pa$$word',
+      $docker_registry_email = 'user@example.com',
+      $certs_dir = '/certs',
+      $bin_dir = '/usr/local/bin',
+      $docker_certs_crt_dir = "/etc/docker/certs.d",
+      $docker_registry_lib = "/registry_lib",
 ) {
-
+    class { ci_manager::docker:
+      docker_registry_image_name => $docker_registry_image_name,
+      docker_registry_host => $docker_registry_host,
+      docker_registry_port => $docker_registry_port,
+      docker_registry_user => $docker_registry_user,
+      docker_registry_password => $docker_registry_password,
+      docker_registry_email => $docker_registry_email,
+      certs_dir => $certs_dir,
+      bin_dir => $bin_dir,
+      docker_certs_crt_dir => $docker_certs_crt_dir,
+      docker_registry_lib => $docker_registry_lib,
+}
 }

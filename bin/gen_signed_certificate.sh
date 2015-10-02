@@ -6,10 +6,9 @@ set -e
 # set vars
 if [ "$#" -gt "0" ]; then
     OUTPUT_DIR=$1
-    echo why here?
 else
     CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-    OUTPUT_DIR="${CURRENT_DIR}/../data/certs"
+    OUTPUT_DIR="${CURRENT_DIR}/../data/private/certs"
 fi
 
 SSL_COUNTRY=UA
@@ -26,4 +25,3 @@ echo -n "Certificates are saved to $OUTPUT_DIR" && \
       -newkey rsa:4096 -nodes -sha256 -keyout $OUTPUT_DIR/domain.key \
       -x509 -days 365 -out $OUTPUT_DIR/domain.crt \
       -subj "/C=$SSL_COUNTRY/ST=$SSL_STATE/L=$SSL_LOCATION/O=$SSL_ORGANIZATION/OU=$SSL_ORG_UNIT/CN=$SSL_CN"
-
