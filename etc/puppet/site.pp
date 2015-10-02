@@ -52,6 +52,7 @@ class {'ci_manager':
     docker_registry_user => $docker['registry']['user'],
     docker_registry_password => $docker['registry']['password'],
     docker_registry_email => $docker['registry']['email'],
+    docker_socket => $docker['socket'],
 }
 
 #class {ci_manager::docker:

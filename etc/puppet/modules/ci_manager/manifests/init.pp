@@ -47,6 +47,7 @@ class ci_manager (
       $bin_dir = '/usr/local/bin',
       $docker_certs_crt_dir = "/etc/docker/certs.d",
       $docker_registry_lib = "/registry_lib",
+      $docker_socket = '/var/run/docker.sock',
 ) {
     class { ci_manager::docker:
       docker_registry_image_name => $docker_registry_image_name,
@@ -59,5 +60,6 @@ class ci_manager (
       bin_dir => $bin_dir,
       docker_certs_crt_dir => $docker_certs_crt_dir,
       docker_registry_lib => $docker_registry_lib,
+      docker_socket => $docker_socket,
 }
 }

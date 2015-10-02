@@ -10,3 +10,4 @@ project_page 'UNKNOWN'
 ## Add dependencies, if any:
 dependency 'puppetlabs/stdlib', '>= 4.9.0'
 dependency 'garethr/docker', '>= 4.1.1'
+dependency 'dockerui/dockerui', '>= 0.0.1'

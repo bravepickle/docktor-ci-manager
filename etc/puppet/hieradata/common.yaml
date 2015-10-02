@@ -11,6 +11,8 @@ ci_manager:
     ip: "127.0.0.1"
 
 docker:
+    socket: '/var/run/docker.sock'
+
     registry:
         host: "docktor-ci-manager"
         port: 5000
