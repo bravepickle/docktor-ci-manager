@@ -23,3 +23,4 @@ See https://github.com/docker/docker/issues/9015 for API usage of Registry V2
 - DockerUI
 - Docker Registry
 - CI Server: GO CD Server + Agent
+- add volumes for GO CD Agent 
