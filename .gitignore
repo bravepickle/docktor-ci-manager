@@ -1,4 +1,3 @@
-/data/certs
-/etc/puppet/modules/
-!/etc/puppet/modules/ci_manager/
-/data/private/
+data/private/
+etc/puppet/modules/*
+!etc/puppet/modules/ci_manager

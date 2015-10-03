@@ -61,5 +61,9 @@ class ci_manager (
       docker_certs_crt_dir => $docker_certs_crt_dir,
       docker_registry_lib => $docker_registry_lib,
       docker_socket => $docker_socket,
-}
+    }
+
+    class { ci_manager::go_cd:
+      
+    }
 }
