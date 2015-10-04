@@ -55,9 +55,6 @@ class {'ci_manager':
     docker_socket => $docker['socket'],
 }
 
-#class {ci_manager::docker:
-#}
-
 class {'locales':
     default_locale  => 'en_US.UTF-8',
     locales => ['en_US.UTF-8 UTF-8', 'ru_UA.UTF-8 UTF-8'],

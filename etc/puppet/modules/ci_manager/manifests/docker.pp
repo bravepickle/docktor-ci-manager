@@ -89,7 +89,6 @@ class ci_manager::docker (
         name            => $docker_gocd_srv_name,
         image           => 'gocd/gocd-server',
         ports           => ["$docker_gocd_srv_port:8153", "8154:8154"],
-    # ports           => ["$docker_gocd_srv_port:8153", ],
         use_name        => true,
         hostname        => $docker_gocd_srv_host,
         manage_service  => true,
@@ -124,21 +123,10 @@ class ci_manager::docker (
     # "/var/lib/go-server", "/var/log/go-server" and "/etc/go"
     }
 
-# https://docktor-ci-manager:8154/go/
     docker::run { 'go_cd_agent':
         name            => $docker_gocd_agent_name,
-    # links           => ["192.168.35.121:gocd-server"],
-        links           => ["$docker_gocd_srv_name:gocd-server"],
-    # tty => true,
-    # hostname        => $docker_gocd_agent_host,
         image           => 'gocd/gocd-agent',
-    # use_name        => true,
-    # manage_service => true,
-    # restart_service => true,
-    # ports           => ["$docker_gocd_agent_port:8154"],
         env             => ["GO_SERVER=$docker_gocd_srv_host"],
-        depends         => [ $docker_gocd_srv_name ],
-
         volumes         => [
             "$docker_gocd_volume_dir/agent/lib:/var/lib/go-agent",
             "$docker_gocd_volume_dir/agent/log:/var/log/go-agent",

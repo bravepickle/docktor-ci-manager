@@ -30,3 +30,10 @@ See https://github.com/docker/docker/issues/9015 for API usage of Registry V2
 - extract more variables to hiera configs remove unused
 - configure go cd reverse proxy [done]
 - fix proxy for docker ui - persistent connection closed for ajax requests
+- use Supervisor and Docker Compose for handling docker containers and other apps
+- improve base vagrant box: remove cache, install additional apps like vim, htop etc.
+- replace packer-vmware-iso user with another one
+- think of removal of docker installation in Puppet, because it should already exist on virtual machine, server per se. But do not delete setup from Puppet because it has some additional features, such as cleaning base configs
+- add server performance tools (Nagios, Zabbix or similar)
+- consider https://hub.docker.com/r/francescou/docker-compose-ui/
+- consider https://forge.puppetlabs.com/garystafford/docker_compose
