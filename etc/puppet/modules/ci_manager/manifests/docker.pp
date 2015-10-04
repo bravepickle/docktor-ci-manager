@@ -138,6 +138,11 @@ class ci_manager::docker (
     # ports           => ["$docker_gocd_agent_port:8154"],
         env             => ["GO_SERVER=$docker_gocd_srv_host"],
         depends         => [ $docker_gocd_srv_name ],
+
+        volumes         => [
+            "$docker_gocd_volume_dir/agent/lib:/var/lib/go-agent",
+            "$docker_gocd_volume_dir/agent/log:/var/log/go-agent",
+        ],
     }
 
 # see https://hub.docker.com/r/gocd/gocd-agent/ for installing remote gocd agent
