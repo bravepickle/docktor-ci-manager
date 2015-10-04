@@ -52,7 +52,7 @@ fi
 
 # Install puppet
 echo Setup Puppet
-(puppet --version | grep -q "3.4.3") && apt-get remove -y puppet || echo skipping... # remove outdated Puppet version and configs
+(puppet --version | grep -q "3.4.3") && apt-get remove -y puppet puppet-common && echo removed old version of Puppet... || echo skipping... # remove outdated Puppet version and configs
 
 puppet --version || (\
     cd /tmp && \

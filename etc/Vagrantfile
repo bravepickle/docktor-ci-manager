@@ -45,7 +45,7 @@ Vagrant.configure(2) do |config|
 
   #config.vm.synced_folder "../data/private/certs", "/certs", type: "rsync"
 
-  config.vm.synced_folder "puppet/modules", puppet_modulepath
+  config.vm.synced_folder "puppet/modules", puppet_modulepath, type: "rsync"
   config.vm.synced_folder "puppet", "/etc/puppet", type: "rsync", rsync__exclude: ["modules/"]
 
   # copy SSH keys to vagrant

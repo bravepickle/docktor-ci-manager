@@ -4,18 +4,18 @@ class ci_manager::go_cd (
     $tmp_dir = '/tmp'
 ) {
 
-  apt::source { 'go_cd':
-    comment  => 'Installing GO CD sources',
-    location => 'http://dl.bintray.com/gocd/gocd-deb/',
-    key      => {
-      id => 'bb111222',
-      source => "https://bintray.com/user/downloadSubjectPublicKey?username=gocd",
-    },
-    # include  => {
-    #   'src' => true,
-    #   'deb' => true,
-    # },
-  }
+#  apt::source { 'go_cd':
+#    comment  => 'Installing GO CD sources',
+#    location => 'http://dl.bintray.com/gocd/gocd-deb/',
+#    key      => {
+#      id => 'bb111222',
+#      source => "https://bintray.com/user/downloadSubjectPublicKey?username=gocd",
+#    },
+#    # include  => {
+#    #   'src' => true,
+#    #   'deb' => true,
+#    # },
+#  }
 
 
 
