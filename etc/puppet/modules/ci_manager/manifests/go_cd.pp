@@ -24,29 +24,29 @@ class ci_manager::go_cd (
 # $ apt-get update
 # $ apt-get install go-server
 
-  # exec { 'go-cd-server-download':
-  #     command => "curl -o ./go-cd-server.deb '$server_uri'",
-  #     path => "/usr/bin",
-  #     cwd => $tmp_dir,
-  # }
-  #
-  # package { 'go-cd-server':
-  #   ensure => latest,
-  #   provider => dpkg,
-  #   source => "$tmp_dir/go-cd-server.deb",
-  #   require => Exec['go-cd-server-download'],
-  # }
-  #
-  # exec { 'go-cd-agent-download':
-  #     command => "curl -o ./go-cd-agent.deb '$agent_uri'",
-  #     path => "/usr/bin",
-  #     cwd => $tmp_dir,
-  # }
-  #
-  # package { 'go-cd-agent':
-  #   ensure => latest,
-  #   provider => dpkg,
-  #   source => "$tmp_dir/go-cd-agent.deb",
-  #   require => Exec['go-cd-agent-download'],
-  # }
+# exec { 'go-cd-server-download':
+#     command => "curl -o ./go-cd-server.deb '$server_uri'",
+#     path => "/usr/bin",
+#     cwd => $tmp_dir,
+# }
+#
+# package { 'go-cd-server':
+#   ensure => latest,
+#   provider => dpkg,
+#   source => "$tmp_dir/go-cd-server.deb",
+#   require => Exec['go-cd-server-download'],
+# }
+#
+# exec { 'go-cd-agent-download':
+#     command => "curl -o ./go-cd-agent.deb '$agent_uri'",
+#     path => "/usr/bin",
+#     cwd => $tmp_dir,
+# }
+#
+# package { 'go-cd-agent':
+#   ensure => latest,
+#   provider => dpkg,
+#   source => "$tmp_dir/go-cd-agent.deb",
+#   require => Exec['go-cd-agent-download'],
+# }
 }

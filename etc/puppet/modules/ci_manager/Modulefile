@@ -13,3 +13,5 @@ dependency 'garethr/docker', '>= 4.1.1'
 dependency 'dockerui/dockerui', '>= 0.0.1'
 dependency 'gocd/gocd-server', '>= 0.0.1'
 dependency 'gocd/gocd-agent', '>= 0.0.1'
+dependency 'jfryman-nginx', '>= 0.2.7'
+

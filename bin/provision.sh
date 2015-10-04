@@ -14,6 +14,8 @@ DOCKER_COMPOSE_BIN=/usr/local/bin
 PUPPET_DOCKER=garethr/docker
 PUPPET_STDLIB=puppetlabs/stdlib
 PUPPET_LOCALE=saz/locales
+PUPPET_NGINX=jfryman/nginx
+
 CERTS_DIR=/certs
 
 APP_ENV=dev
@@ -72,3 +74,4 @@ install_module() {
 install_module $PUPPET_STDLIB
 install_module $PUPPET_DOCKER
 install_module $PUPPET_LOCALE
+install_module $PUPPET_NGINX

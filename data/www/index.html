@@ -1,0 +1,80 @@
+
+<!DOCTYPE html>
+<html>
+<meta http-equiv=Content-Type content="text/html;charset=UTF-8">
+<head><title>API Docs</title></head>
+<style>
+    body {
+        font-family: "Droid Sans", sans-serif;
+    }
+
+    iframe {
+        background: #f5f5f5;
+        /*height: 600px;*/
+    }
+
+    ul {
+        list-style: none;
+    }
+
+    div.menu {
+        height: 30px;
+    }
+
+    li {
+        float: left;
+        padding: 5px;
+    }
+
+    a, a:visited, a:link, a:active {
+        color: steelblue;
+    }
+
+    .active {
+        background-color: #e7f0f7;
+    }
+
+    .active a {
+        text-decoration: none;
+    }
+</style>
+<script type="text/javascript" language="javascript">
+    var els = document.getElementsByTagName('a');
+    function initMenu() {
+        for (var i = 0; i < els.length; i++) {
+            els[i].addEventListener("click", toggleLink, false);
+        }
+    }
+
+    function toggleLink() {
+        for (var i = 0; i < els.length; i++) {
+            els[i].parentNode.className = ''
+        }
+
+        this.parentNode.className = 'active';
+    }
+
+    function autoResize(id) {
+        document.getElementById(id).height = top.window.screen.availHeight - 40;
+    }
+
+    window.onload = function () {
+        initMenu();
+        autoResize('content');
+    };
+</script>
+<body>
+<div class="menu">
+    <ul>
+        <li class="active"><a href="http://docktor-ci-manager:9000/" target="content">Docker UI</a></li>
+        <li><a href="https://registry.docktor-ci-manager/v2/_catalog/" target="content">Docker Registry</a></li>
+        <li><a href="http://sonar.docktor-ci-manager/" target="content">Sonar</a></li>
+        <li><a href="http://go-cd.docktor-ci-manager/go/pipelines" target="content">GO CD Server</a></li>
+    </ul>
+    <div style="clear: both"/>
+</div>
+<hr/>
+<iframe id="content" name="content" src="http://docktor-ci-manager:9000/" frameborder="0"
+        width="100%"></iframe>
+</body>
+</html>

@@ -20,6 +20,7 @@ class ci_manager::docker (
     $docker_gocd_agent_port = '8160',
     $docker_gocd_agent_name = 'go_cd_agent',
     $docker_gocd_volume_dir = '/data/private/go_cd',
+    $docker_sonar_volume_dir = '/data/private/sonarqube',
 ) {
 
     class { '::docker':
@@ -99,6 +100,25 @@ class ci_manager::docker (
             "$docker_gocd_volume_dir/server/lib:/var/lib/go-server",
             "$docker_gocd_volume_dir/server/log:/var/log/go-server",
             "$docker_gocd_volume_dir/server/etc:/etc/go",
+        ],
+
+    # "/var/lib/go-server", "/var/log/go-server" and "/etc/go"
+    }
+
+#  see https://hub.docker.com/_/sonarqube/ for prod env
+#    ENV SONARQUBE_HOME /opt/sonarqube VOLUME ["$SONARQUBE_HOME/data", "$SONARQUBE_HOME/extensions"]
+
+    docker::run { 'sonar':
+        name            => 'sonar',
+        image           => 'sonarqube:5.1',
+        ports           => ["9001:9000", "9092:9092"],
+        use_name        => true,
+        hostname        => $::fqdn,
+        manage_service  => true,
+        restart_service => true,
+        volumes         => [
+            "$docker_sonar_volume_dir/data:/opt/sonarqube/data",
+            "$docker_sonar_volume_dir/extensions:/opt/sonarqube/extensions",
         ],
 
     # "/var/lib/go-server", "/var/log/go-server" and "/etc/go"

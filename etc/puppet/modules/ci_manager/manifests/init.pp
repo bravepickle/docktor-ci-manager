@@ -64,6 +64,8 @@ class ci_manager (
     }
 
     class { ci_manager::go_cd:
-      
+
     }
+
+    class {  ci_manager::nginx: }
 }
