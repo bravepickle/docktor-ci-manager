@@ -3,8 +3,6 @@ class ci_manager::go_cd_server::config (
 ) {
     $dir = $config['data_dir']
 
-    notify {"GOCD data dir $dir":}
-
     exec { "mkdir -p $dir/server/lib":
         path => '/bin',
         creates => "$dir/server/lib"

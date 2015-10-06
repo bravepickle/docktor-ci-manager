@@ -17,7 +17,7 @@ class ci_manager::go_cd_server::init (
 #ip: "127.0.0.1"
 
     docker::run { 'go_cd_server':
-        name            => $docker['container_name'],
+        name            => $config['container_name'],
         image           => 'gocd/gocd-server',
         ports           => ["${config[port_web]}:8153", "${config[port_agent]}:8154"],
         use_name        => true,

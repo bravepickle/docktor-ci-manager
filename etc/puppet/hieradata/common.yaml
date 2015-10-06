@@ -31,4 +31,12 @@ docker:
             port_agent: 8154
             data_dir: /data/private/go_cd
 
-# docker_opts: DOCKER_OPTS="--insecure-registry docktor-ci-manager:7111"
+        agent:
+            container_name: go_cd_agent
+            data_dir: /data/private/go_cd
+
+    sonar:
+        port_web: 9001
+        port_api: 9092
+        container_name: sonar
+        data_dir: /data/private/go_cd

@@ -63,9 +63,5 @@ class ci_manager (
       docker_socket => $docker_socket,
     }
 
-    class { ci_manager::go_cd:
-
-    }
-
     class {  ci_manager::nginx: }
 }
