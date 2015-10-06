@@ -52,10 +52,6 @@ fi
 
 # Install puppet
 echo Setup Puppet
-(puppet --version | grep -q "3.4.3") && apt-get purge -y puppet puppet-common && apt-get autoremove -y && \
-    rm /etc/puppet/puppet.conf /etc/puppet/hiera.yaml && \
-    echo removed old version of Puppet... || echo skipping... # remove outdated Puppet version and configs
-
 puppet --version || (\
     cd /tmp && \
     wget https://apt.puppetlabs.com/puppetlabs-release-trusty.deb && \
@@ -83,6 +79,7 @@ nginx -v || (wget -q http://nginx.org/keys/nginx_signing.key -O- | apt-key add -
     echo deb-src http://nginx.org/packages/ubuntu/ trusty nginx >> /etc/apt/sources.list && \
     apt-get update && \
     apt-get -y upgrade && \
+    apt-get -y install nginx && \
     sed -i -e"s/worker_processes  1/worker_processes 5/" /etc/nginx/nginx.conf && \
     sed -i -e"s/keepalive_timeout\s*65/keepalive_timeout 2/" /etc/nginx/nginx.conf && \
     sed -i -e"s/keepalive_timeout 2/keepalive_timeout 2;\n\tclient_max_body_size 100m/" /etc/nginx/nginx.conf && \

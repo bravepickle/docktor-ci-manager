@@ -85,43 +85,84 @@ class ci_manager::docker (
     }
 
 # TODO: move docker images to separate files
-    docker::run { 'go_cd_server':
-        name            => $docker_gocd_srv_name,
-        image           => 'gocd/gocd-server',
-        ports           => ["$docker_gocd_srv_port:8153", "8154:8154"],
-        use_name        => true,
-        hostname        => $docker_gocd_srv_host,
-        manage_service  => true,
-        restart_service => true,
-    # env             => ["AGENT_KEY=123456789abcdef#!!"],
 
-        volumes         => [
-            "$docker_gocd_volume_dir/server/lib:/var/lib/go-server",
-            "$docker_gocd_volume_dir/server/log:/var/log/go-server",
-            "$docker_gocd_volume_dir/server/etc:/etc/go",
-        ],
-
-    # "/var/lib/go-server", "/var/log/go-server" and "/etc/go"
+    $docker = hiera('docker')
+    $app = hiera('ci_manager')
+    class { ci_manager::go_cd_server::init:
+        docker => $docker,
+        app => $app,
     }
+
+
+
+#    exec {[
+#            "mkdir -p $docker_gocd_volume_dir/server/lib",
+#            "mkdir -p $docker_gocd_volume_dir/server/log",
+#            "mkdir -p $docker_gocd_volume_dir/server/etc",
+#            "mkdir -p $docker_gocd_volume_dir/server/addons",
+#        ],
+#        path => '/bin',
+#
+#    }
+
+#    docker::run { 'go_cd_server':
+#        name            => $docker_gocd_srv_name,
+#        image           => 'gocd/gocd-server',
+#        ports           => ["$docker_gocd_srv_port:8153", "8154:8154"],
+#        use_name        => true,
+#        hostname        => $docker_gocd_srv_host,
+#        manage_service  => true,
+#        restart_service => true,
+#    # env             => ["AGENT_KEY=123456789abcdef#!!"],
+#        volumes         => [
+#            "$docker_gocd_volume_dir/server/lib:/var/lib/go-server",
+#            "$docker_gocd_volume_dir/server/log:/var/log/go-server",
+#            "$docker_gocd_volume_dir/server/etc:/etc/go",
+#            "$docker_gocd_volume_dir/server/addons:/go-addons",
+#        ],
+#    }
+#
+#    Class['ci_manager::go_cd_server::config'] -> Docker::Run['go_cd_server']
+#    Exec['go_cd_server_dir'] -> Docker::Run['go_cd_server']
 
 #  see https://hub.docker.com/_/sonarqube/ for prod env
 #    ENV SONARQUBE_HOME /opt/sonarqube VOLUME ["$SONARQUBE_HOME/data", "$SONARQUBE_HOME/extensions"]
 
-    docker::run { 'sonar':
-        name            => 'sonar',
-        image           => 'sonarqube:5.1',
-        ports           => ["9001:9000", "9092:9092"],
-        use_name        => true,
-        hostname        => $::fqdn,
-        manage_service  => true,
-        restart_service => true,
-        volumes         => [
-            "$docker_sonar_volume_dir/data:/opt/sonarqube/data",
-            "$docker_sonar_volume_dir/extensions:/opt/sonarqube/extensions",
-        ],
+#    exec {'sonar_dir':
+#        command => [
+#            "mkdir -p $docker_sonar_volume_dir/data",
+#            "mkdir -p $docker_sonar_volume_dir/extensions",
+#        ],
+#        path => '/bin',
+#    }
 
-    # "/var/lib/go-server", "/var/log/go-server" and "/etc/go"
-    }
+#    docker::run { 'sonar':
+#        name            => 'sonar',
+#        image           => 'sonarqube:5.1',
+#        ports           => ["9001:9000", "9092:9092"],
+#        use_name        => true,
+#        hostname        => $::fqdn,
+#        manage_service  => true,
+#        restart_service => true,
+#        volumes         => [
+#            "mkdir -p $docker_sonar_volume_dir/data:/opt/sonarqube/data",
+#            "mkdir -p $docker_sonar_volume_dir/extensions:/opt/sonarqube/extensions",
+#        ],
+#
+#    # "/var/lib/go-server", "/var/log/go-server" and "/etc/go"
+#    }
+
+#    Exec['sonar_dir'] -> Docker::Run['sonar']
+
+    notify {"This is used volume: $docker_gocd_volume_dir":}
+
+#    exec {'go_cd_agent_dir':
+#        command => [
+#            "$docker_sonar_volume_dir/data",
+#            "$docker_sonar_volume_dir/extensions",
+#        ],
+#        path => '/bin',
+#    }
 
     docker::run { 'go_cd_agent':
         name            => $docker_gocd_agent_name,
@@ -133,7 +174,7 @@ class ci_manager::docker (
         ],
     }
 
-# see https://hub.docker.com/r/gocd/gocd-agent/ for installing remote gocd agent
+#    Exec['go_cd_agent_dir'] -> Docker::Run['go_cd_agent']
 
 
 }
