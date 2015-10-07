@@ -5,10 +5,11 @@ extra_packages:
     - htop
     - wget
     - iotop
+    - git
 
 ci_manager:
-    host: "docktor-ci-manager"
-    ip: "127.0.0.1"
+    host: docktor-ci-manager
+    ip: 127.0.0.1
 
 docker:
     socket: '/var/run/docker.sock'

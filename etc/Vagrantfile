@@ -3,12 +3,12 @@
 
 vm_hostname = "docktor-ci-manager"
 vm_ip = "192.168.35.121"
-vm_name = "Docktor CI/CD manager"
+vm_name = "Docktor CI/CD Manager"
 vm_user = "vagrant"
 vm_hieradata_dir = "/etc/puppet/hieradata"
 # vm_root_dir = "/var/www/#{vm_hostname}"
-puppet_modulepath = "/etc/puppet/modules"
-#puppet_modulepath = "/usr/share/puppet/modules" # can be set to /etc/puppet/modules
+vm_modulepath = "/etc/puppet/modules"
+#vm_modulepath = "/usr/share/puppet/modules" # can be set to /etc/puppet/modules
 vm_bin = "/usr/local/bin"
 
 Vagrant.configure(2) do |config|
@@ -45,9 +45,7 @@ Vagrant.configure(2) do |config|
 
   config.vm.synced_folder ".", "/vagrant", disabled: true # disable syn to "/vagrant" folder
 
-  #config.vm.synced_folder "../data/private/certs", "/certs", type: "rsync"
-
-  config.vm.synced_folder "puppet/modules", puppet_modulepath
+  config.vm.synced_folder "puppet/modules", vm_modulepath
   config.vm.synced_folder "puppet", "/etc/puppet", type: "rsync", rsync__exclude: ["modules/"]
 
   # copy SSH keys to vagrant
@@ -59,21 +57,21 @@ Vagrant.configure(2) do |config|
   # copy binaries
   config.vm.synced_folder "../bin", vm_bin, type: "rsync"
 
+  # copy files from host to guest
+  config.vm.provision "file", source: "~/.gitconfig", destination: "~/.gitconfig"
+  config.vm.provision "file", source: "~/.gitignore_global", destination: "~/.gitignore_global"
+
   # init docker and setup environment
   config.vm.provision "shell", name: "Setup server configuration", path: "../bin/provision.sh"
 
   # puppet install
   config.vm.provision "puppet" do |puppet|
-    puppet.synced_folder_type = "rsync"
+    #puppet.synced_folder_type = "rsync"
     puppet.manifests_path = "puppet"
     puppet.manifest_file = "site.pp"
     puppet.options = "--yamldir #{vm_hieradata_dir}"
     puppet.hiera_config_path = "puppet/hiera.yaml"
     puppet.module_path = "puppet/modules"
-
-    #puppet.working_directory = "/etc/puppet"
-    #puppet.temp_dir = "/tmp/tmp-puppet"
-    #puppet.working_directory = "/tmp/vagrant-puppet"
   end
 
   # Define a Vagrant Push strategy for pushing to Atlas. Other push strategies

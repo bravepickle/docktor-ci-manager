@@ -11,11 +11,6 @@ DOCKER_COMPOSE_INSTALL=0
 DOCKER_COMPOSE_VERSION=1.4.2
 DOCKER_COMPOSE_BIN=/usr/local/bin
 
-PUPPET_DOCKER=garethr/docker
-PUPPET_STDLIB=puppetlabs/stdlib
-PUPPET_LOCALE=saz/locales
-PUPPET_NGINX=jfryman/nginx
-
 CERTS_DIR=/certs
 
 APP_ENV=dev
@@ -66,14 +61,16 @@ install_module() {
     CURRENT=$1
     echo Trying to install module $CURRENT...
 
-    (puppet module list | grep -q "$CURRENT") && puppet module install $CURRENT || echo module $CURRENT already installed
+    (puppet module list | grep -q "$CURRENT") && echo module $CURRENT already installed || puppet module install $CURRENT
 }
 
-install_module $PUPPET_STDLIB
-install_module $PUPPET_DOCKER
-install_module $PUPPET_LOCALE
-install_module $PUPPET_NGINX
+install_module garethr/docker
+install_module puppetlabs/stdlib
+install_module saz/locales
+install_module jfryman/nginx
+install_module saz-timezone
 
+echo Setup NGINX
 nginx -v || (wget -q http://nginx.org/keys/nginx_signing.key -O- | apt-key add - && \
     echo deb http://nginx.org/packages/ubuntu/ trusty nginx >> /etc/apt/sources.list && \
     echo deb-src http://nginx.org/packages/ubuntu/ trusty nginx >> /etc/apt/sources.list && \
@@ -89,6 +86,3 @@ nginx -v || (wget -q http://nginx.org/keys/nginx_signing.key -O- | apt-key add -
     mkdir -p /etc/nginx/sites-enabled/ && \
     mkdir -p /etc/nginx/ssl/ && \
     nginx -v)
-
-
-
