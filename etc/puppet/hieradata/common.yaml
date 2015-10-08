@@ -40,4 +40,4 @@ docker:
         port_web: 9001
         port_api: 9092
         container_name: sonar
-        data_dir: /data/private/go_cd
+        data_dir: /data/private/sonarqube

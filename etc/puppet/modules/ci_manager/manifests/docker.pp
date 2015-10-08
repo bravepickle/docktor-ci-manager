@@ -53,8 +53,13 @@ class ci_manager::docker (
         File["docker_cert:$docker_registry_host:$docker_registry_port"] -> Docker::Run['images_registry']
     }
 
+    $docker = hiera('docker')
+    $app = hiera('ci_manager')
+
+    $certs_dir_source = $docker['registry']['certs_dir']
+
     docker::run { 'images_registry':
-        volumes         => ["$certs_dir:/certs", "$docker_registry_lib:/var/lib/registry"],
+        volumes         => ["$certs_dir_source:/certs", "$docker_registry_lib:/var/lib/registry"],
         name            => $docker_registry_image_name,
         image           => 'registry:2',
         ports           => ["$docker_registry_port:5000"],
@@ -81,9 +86,6 @@ class ci_manager::docker (
         restart_service => true,
     #        privileged      => true,
     }
-
-    $docker = hiera('docker')
-    $app = hiera('ci_manager')
 
     class { ci_manager::go_cd_server::init:
         docker => $docker,

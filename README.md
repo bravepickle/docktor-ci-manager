@@ -37,3 +37,4 @@ See https://github.com/docker/docker/issues/9015 for API usage of Registry V2
 - add server performance tools (Nagios, Zabbix or similar)
 - consider https://hub.docker.com/r/francescou/docker-compose-ui/
 - consider https://forge.puppetlabs.com/garystafford/docker_compose
+- switch packer vmware tools patches to main repo from my fork. Bugs are fixed
