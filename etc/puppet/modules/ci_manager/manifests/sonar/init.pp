@@ -11,8 +11,7 @@ class ci_manager::sonar::init (
         config => $config,
     }
 
-    docker::run { 'sonar':
-        name            => $config['container_name'],
+    docker::run { $config['container_name']:
         image           => 'sonarqube:5.1',
         ports           => ["${config[port_web]}:9000", "${config[port_api]}:9092"],
         use_name        => true,
@@ -25,5 +24,5 @@ class ci_manager::sonar::init (
         ],
     }
 
-    Class['ci_manager::sonar::config'] -> Docker::Run['sonar']
+    Class['ci_manager::sonar::config'] -> Docker::Run[$config['container_name']]
 }

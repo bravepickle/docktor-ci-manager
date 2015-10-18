@@ -1,6 +1,8 @@
 class ci_manager::nginx {
 
-    class { ::nginx: }
+    class { ::nginx:
+        service_ensure => running,
+    }
 
     file { '_nginx_vhost':
         path   => '/etc/nginx/sites-enabled/default-vhost.conf',

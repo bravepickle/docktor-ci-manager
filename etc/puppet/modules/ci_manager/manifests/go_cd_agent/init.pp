@@ -9,8 +9,7 @@ class ci_manager::go_cd_agent::init (
         config => $config,
     }
 
-    docker::run { 'go_cd_agent':
-        name            => $config['container_name'],
+    docker::run { $config['container_name']:
         image           => 'gocd/gocd-agent',
         env             => [
             "GO_SERVER=${app[host]}",
@@ -22,5 +21,5 @@ class ci_manager::go_cd_agent::init (
         ],
     }
 
-    Class['ci_manager::go_cd_agent::config'] -> Docker::Run['go_cd_agent']
+    Class['ci_manager::go_cd_agent::config'] -> Docker::Run[$config['container_name']]
 }

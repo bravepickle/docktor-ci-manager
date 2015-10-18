@@ -38,3 +38,5 @@ See https://github.com/docker/docker/issues/9015 for API usage of Registry V2
 - consider https://hub.docker.com/r/francescou/docker-compose-ui/
 - consider https://forge.puppetlabs.com/garystafford/docker_compose
 - switch packer vmware tools patches to main repo from my fork. Bugs are fixed
+- fix problems with permissions - shared folder force specific users and groups that cannot reset. But we need to see them and be able to do backups, rewrite some stuff. Docker containers force their permissions as well for some of them
+- add directly to vagrant boxes docker user and group wit id: 999

@@ -17,7 +17,7 @@ docker:
     registry:
         host: "docktor-ci-manager"
         port: 5000
-        name: 'images_registry'
+        name: images-registry
         user: "zig-zag"
         password: "1234"
         email: "bravepickle@github.com"
@@ -27,13 +27,13 @@ docker:
     go_cd:
         agent_key: 123456789abcdef # server default. Must be synced by all servers and agents
         server:
-            container_name: go_cd_server
+            container_name: go-cd-server
             port_web: 8153
             port_agent: 8154
             data_dir: /data/private/go_cd
 
         agent:
-            container_name: go_cd_agent
+            container_name: go-cd-agent
             data_dir: /data/private/go_cd
 
     sonar:

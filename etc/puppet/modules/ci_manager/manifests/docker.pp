@@ -22,6 +22,16 @@ class ci_manager::docker (
     $docker_gocd_volume_dir = '/data/private/go_cd',
     $docker_sonar_volume_dir = '/data/private/sonarqube',
 ) {
+    group {'docker':
+        gid => 999,
+    }
+
+    user {'docker':
+        uid => 999,
+        groups => ['docker'],
+    }
+
+    Group['docker'] -> User['docker'] -> Class['ci_manager::go_cd_server::init']
 
     class { '::docker':
         socket_bind => "unix://$docker_socket",
@@ -50,7 +60,7 @@ class ci_manager::docker (
             notify  => Service['docker'],
         }
 
-        File["docker_cert:$docker_registry_host:$docker_registry_port"] -> Docker::Run['images_registry']
+        File["docker_cert:$docker_registry_host:$docker_registry_port"] -> Docker::Run[$docker_ui_name]
     }
 
     $docker = hiera('docker')
@@ -58,9 +68,8 @@ class ci_manager::docker (
 
     $certs_dir_source = $docker['registry']['certs_dir']
 
-    docker::run { 'images_registry':
+    docker::run { $docker_registry_image_name:
         volumes         => ["$certs_dir_source:/certs", "$docker_registry_lib:/var/lib/registry"],
-        name            => $docker_registry_image_name,
         image           => 'registry:2',
         ports           => ["$docker_registry_port:5000"],
         use_name        => true,
@@ -74,9 +83,8 @@ class ci_manager::docker (
         restart_service => true,
     }
 
-    docker::run { 'dockerui':
+    docker::run { $docker_ui_name:
         volumes         => ["$docker_socket:/var/run/docker.sock"],
-        name            => $docker_ui_name,
         image           => 'dockerui/dockerui',
         ports           => ["$docker_ui_port:9000"],
         use_name        => true,

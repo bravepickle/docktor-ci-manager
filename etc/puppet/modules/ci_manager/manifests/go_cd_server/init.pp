@@ -5,19 +5,12 @@ class ci_manager::go_cd_server::init (
 
     $config = $docker['go_cd']['server']
     $dir = $config['data_dir']
-#$docker_gocd_srv_host = 'docktor-ci-manager',
-#$docker_gocd_srv_name = 'go_cd_server',
-#$docker_gocd_srv_port = '8153',
 
     class { ci_manager::go_cd_server::config:
         config => $config,
     }
-#    ci_manager:
-#    host: "docktor-ci-manager"
-#ip: "127.0.0.1"
 
-    docker::run { 'go_cd_server':
-        name            => $config['container_name'],
+    docker::run { $config['container_name']:
         image           => 'gocd/gocd-server',
         ports           => ["${config[port_web]}:8153", "${config[port_agent]}:8154"],
         use_name        => true,
@@ -33,5 +26,5 @@ class ci_manager::go_cd_server::init (
         ],
     }
 
-    Class['ci_manager::go_cd_server::config'] -> Docker::Run['go_cd_server']
+    Class['ci_manager::go_cd_server::config'] -> Docker::Run[$config['container_name']]
 }

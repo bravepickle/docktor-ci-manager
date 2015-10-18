@@ -52,7 +52,7 @@ Vagrant.configure(2) do |config|
   config.vm.synced_folder "~/.ssh", "/home/vagrant/.ssh_host", type: "rsync", rsync__exclude: ["authorized_keys"]
 
   # TODO: remove. Is temporary for development
-  config.vm.synced_folder "../data", "/data"
+  config.vm.synced_folder "../data", "/vagrant_data" #, user: "docker", "group": "docker" #type: "rsync", rsync__chown: false
 
   # copy binaries
   config.vm.synced_folder "../bin", vm_bin, type: "rsync"
